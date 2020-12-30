@@ -1,7 +1,7 @@
 
 
 TAG=micro-reverse-proxy
-REPO=ghcr.io/github/0ex/${TAG}
+REPO=ghcr.io/0ex/${TAG}
 USER=akvadrako
 
 all: build login push
@@ -11,7 +11,9 @@ login:
 	    | docker login ghcr.io -u akvadrako --password-stdin
 
 build:
-	go build -o proxy
+	CGO_ENABLED=0 GOOS=linux go build -a -o proxy \
+	    -tags netgo \
+	    -ldflags '-w -extldflags "-static"' 
 	docker build -t ${TAG} .
 
 push:
