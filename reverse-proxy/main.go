@@ -6,14 +6,14 @@
 package main
 
 import (
-	"os"
-	"fmt"
-	"flag"
-	"log"
 	"crypto/tls"
+	"flag"
+	"fmt"
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 )
 
 var port = flag.Int("p", 80, "port")
@@ -21,7 +21,7 @@ var port = flag.Int("p", 80, "port")
 func main() {
 	var prog = os.Args[0]
 	flag.Parse()
-	
+
 	if len(flag.Args()) != 1 {
 		fmt.Printf("usage: %v [-port 80] [target-url]\n", prog)
 		os.Exit(1)
@@ -37,7 +37,7 @@ func main() {
 
 	proxy := httputil.NewSingleHostReverseProxy(target)
 	proxy.Transport = &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify : true},
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -53,4 +53,3 @@ func main() {
 		panic(err)
 	}
 }
-
